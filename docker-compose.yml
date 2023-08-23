@@ -1,0 +1,64 @@
+#
+# Client: Antoine Solutions
+# Project: DDD Forum
+#
+
+services:
+  node:
+    command: bash
+    depends_on:
+      - db
+      - mailcatcher
+    environment:
+      # node
+      NODE_ENV:
+      NODE_PORT:
+      # postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DATABASE:
+      # jwilder/nginx_proxy
+      VIRTUAL_HOST: ${COMPOSE_PROJECT_NAME}.${DOMAIN}
+      VIRTUAL_PORT: ${NODE_PORT}
+    hostname: node.${COMPOSE_PROJECT_NAME}
+    expose:
+      - ${NODE_PORT}
+    image: node:latest
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    user: node
+    volumes:
+      - ./:/home/node/app
+    working_dir: /home/node/app
+
+  db:
+    environment:
+      POSTGRES_PASSWORD:
+    image: postgres
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  adminer:
+    environment:
+      ADMINER_PORT:
+      # jwilder/nginx_proxy
+      VIRTUAL_HOST: adminer-${COMPOSE_PROJECT_NAME}.${DOMAIN}
+      VIRTUAL_PORT: ${ADMINER_PORT}
+    image: adminer
+    expose:
+      - ${ADMINER_PORT}
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  mailcatcher:
+    environment:
+      # jwilder/nginx_proxy
+      VIRTUAL_HOST: mailcatcher-${COMPOSE_PROJECT_NAME}.${DOMAIN}
+      VIRTUAL_PORT: 1080
+    hostname: mailcatcher-${COMPOSE_PROJECT_NAME}
+    image: schickling/mailcatcher
+    networks:
+      - default
+    restart: unless-stopped
