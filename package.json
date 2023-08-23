@@ -17,8 +17,12 @@
     "prettier-watch:win32": "onchange \"src/**/*.ts\" -- prettier --write {{changed}}",
     "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
-    "test": "jest",
-    "test:dev": "jest --watchAll"
+    "test:unit": "jest -c jest.config.unit.js",
+    "test:unit:dev": "jest -c jest.config.unit.js --watchAll",
+    "test:infra": "jest -c jest.config.infra.js",
+    "test:infra:dev": "jest -c jest.config.infra.js --watchAll",
+    "test:e2e": "jest -c jest.config.e2e.js",
+    "test:e2e:dev": "jest -c jest.config.e2e.js --watchAll"
   },
   "husky": {
     "hooks": {
@@ -40,6 +44,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.1",
     "jest": "^28.1.3",
+    "jest-cucumber": "^3.0.1",
     "nodemon": "^2.0.19",
     "onchange": "^7.1.0",
     "prettier": "^2.7.1",
@@ -53,7 +58,6 @@
   "dependencies": {
     "@prisma/client": "^5.1.1",
     "express": "^4.18.2",
-    "jest-cucumber": "^3.0.1",
     "pg": "^8.11.3"
   }
 }
